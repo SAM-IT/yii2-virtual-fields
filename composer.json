@@ -11,5 +11,10 @@
             "email": "joey@marketflow.nl"
         }
     ],
+    "autoload": {
+        "psr-4": {
+            "MarketFlow\\Yii2VirtualFields\\" : ["src/"]
+        }
+    },
     "require": {}
 }
