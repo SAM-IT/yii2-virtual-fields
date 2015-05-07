@@ -1,0 +1,15 @@
+{
+    "name": "marketflow/yii2-virtual-fields",
+    "description": "Implementation of virtual fields for Yii2 AR",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Sam Mousa",
+            "email": "sam@marketflow.nl"
+        }, {
+            "name": "Joey Claessen",
+            "email": "joey@marketflow.nl"
+        }
+    ],
+    "require": {}
+}
