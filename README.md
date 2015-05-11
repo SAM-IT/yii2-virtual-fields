@@ -15,8 +15,8 @@ In your ActiveRecord class define a virtualFields function, below is an example 
     public static function virtualFields() {
       return [
         'postCount' => [
-          'lazy' => function($model) { return $this->getPosts()->count; }
-          'greedy' => Post::model()->limit(1)->select('count(*)')->condition('author_id = author.id')
+          'lazy' => function($model) { return $model->getPosts()->count; }
+          'greedy' => Post::find()->limit(1)->select('count(*)')->where('author_id = author.id')
         ]
       ];
     }
