@@ -1,6 +1,7 @@
 <?php
-namespace MarketFlow\Yii2VirtualFields;
-use yii\base\Exception;
+declare(strict_types = 1);
+
+namespace SamIT\Yii2\VirtualFields;
 
 class ActiveRecord extends \yii\db\ActiveRecord
 {

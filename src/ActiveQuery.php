@@ -1,6 +1,7 @@
 <?php
+declare(strict_types = 1);
 
-namespace MarketFlow\Yii2VirtualFields;
+namespace SamIT\Yii2\VirtualFields;
 
 class ActiveQuery extends \yii\db\ActiveQuery
 {
