@@ -5,14 +5,11 @@ namespace SamIT\Yii2\VirtualFields;
 
 
 use yii\base\Behavior;
-use yii\base\Event;
 use yii\base\InvalidConfigException;
-use yii\db\ActiveQueryInterface;
 
 /**
  * Class VirtualFieldBehavior
- * Attach this to activequery.
- * @package SamIT\Yii2\VirtualFields
+ * Attach this to ActiveQuery.
  * @property \yii\db\ActiveQuery $owner
  */
 class VirtualFieldQueryBehavior extends Behavior

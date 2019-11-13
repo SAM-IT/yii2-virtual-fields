@@ -1,7 +1,8 @@
 <?php
 
+use SamIT\Yii2\VirtualFields\exceptions\FieldNotFoundException;
 use SamIT\Yii2\VirtualFields\VirtualFieldQueryBehavior;
-use yii\base\InvalidConfigException;
+use yii\base\UnknownMethodException;
 
 class VirtualFieldQueryBehaviorCest
 {
@@ -20,18 +21,18 @@ class VirtualFieldQueryBehaviorCest
     }
 
     // tests
-    public function tryToTest(FunctionalTester $I)
+    public function testQuery(FunctionalTester $I)
     {
 
         $query = \tests\Author::find();
         $behavior = new VirtualFieldQueryBehavior();
-        $I->expectThrowable(\Throwable::class, function() use ($query) {
+        $I->expectThrowable(UnknownMethodException::class, function() use ($query) {
             $query->withField('postCount');
         });
 
 
         $query->attachBehavior(VirtualFieldQueryBehavior::class, $behavior);
-        $I->expectThrowable(InvalidConfigException::class, function() use ($query) {
+        $I->expectThrowable(FieldNotFoundException::class, function() use ($query) {
             $query->withField('Invalid');
         });
         $query->withField('postCount');
