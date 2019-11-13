@@ -16,14 +16,6 @@
     "require": {
         "php": "> 7.3"
     },
-    "replace": {
-        "bower-asset/jquery": "*",
-        "bower-asset/jquery.inputmask": "*",
-        "bower-asset/inputmask": "*",
-        "bower-asset/punycode": "*",
-        "bower-asset/yii2-pjax": "*"
-
-    },
     "autoload-dev": {
         "classmap": [
             "vendor/yiisoft/yii2/Yii.php",
@@ -33,5 +25,11 @@
     "require-dev": {
         "yiisoft/yii2": "^2.0",
         "codeception/codeception": "^3.1"
-    }
+    },
+    "repositories": [
+        {
+            "type": "composer",
+            "url": "https://asset-packagist.org"
+        }
+    ]
 }
