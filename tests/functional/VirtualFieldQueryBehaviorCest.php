@@ -27,19 +27,20 @@ class VirtualFieldQueryBehaviorCest
         $query = \tests\Author::find();
         $behavior = new VirtualFieldQueryBehavior();
         $I->expectThrowable(UnknownMethodException::class, function() use ($query) {
-            $query->withField('postCount');
+            $query->withFields('postCount');
         });
 
 
         $query->attachBehavior(VirtualFieldQueryBehavior::class, $behavior);
         $I->expectThrowable(FieldNotFoundException::class, function() use ($query) {
-            $query->withField('Invalid');
+            $query->withFields('Invalid');
         });
-        $query->withField('postCount');
+        $query->withFields('postCount', 'postCountWithoutCast');
         $I->assertSame([[
             'id' => '15',
             'name' => 'test',
-            'postCount' => '1'
+            'postCount' => '1',
+            'postCountWithoutCast' => '1'
         ]], $query->asArray()->all());
 
 
@@ -52,5 +53,6 @@ class VirtualFieldQueryBehaviorCest
         $I->assertTrue($post->save());
 
         $I->assertSame(1, $author->postCount);
+        $I->assertSame("1", $author->postCountWithoutCast);
     }
 }

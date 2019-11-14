@@ -6,6 +6,7 @@ namespace SamIT\Yii2\VirtualFields;
 
 use yii\base\Behavior;
 use yii\base\InvalidConfigException;
+use yii\db\ActiveQuery;
 
 /**
  * Class VirtualFieldBehavior
@@ -14,6 +15,7 @@ use yii\base\InvalidConfigException;
  */
 class VirtualFieldQueryBehavior extends Behavior
 {
+    use VirtualFieldQueryTrait;
     /**
      * @param \yii\db\ActiveQuery $owner
      */
@@ -25,14 +27,9 @@ class VirtualFieldQueryBehavior extends Behavior
         }
     }
 
-    public function withField(string $name)
+    public function withFields(string ...$fields): ActiveQuery
     {
-        /** @var \yii\db\ActiveRecord $model */
-        $model = $this->owner->modelClass::instance();
-        if (empty($this->owner->select)) {
-            $this->owner->addSelect('*');
-        }
-        $this->owner->addSelect([$name => $model->getVirtualExpression($name)]);
+        return $this->addField($this->owner, $fields);
     }
 
 }
