@@ -6,6 +6,12 @@ namespace tests;
 
 use yii\db\ActiveRecord;
 
+/**
+ * Class Post
+ * @property int $id
+ * @property ?string $name
+ * @property int $author_id
+ */
 class Post extends ActiveRecord
 {
 
