@@ -19,7 +19,7 @@
     "autoload-dev": {
         "classmap": [
             "vendor/yiisoft/yii2/Yii.php",
-            "tests/_data/app"
+            "tests"
         ]
     },
     "require-dev": {
@@ -46,8 +46,9 @@
     "extra": {
         "hooks": {
             "pre-commit": [
-                "echo committing as $(git config user.name)",
-                "composer lint-fix",
+                "echo committing as $(git config user.name) &&",
+                "composer lint-fix  &&",
+                "composer lint &&",
                 "composer test"
             ],
             "commit-msg": [
