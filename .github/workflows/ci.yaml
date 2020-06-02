@@ -11,6 +11,7 @@ jobs:
         with:
           php-version: '7.4'
           tools: phpcs
+          extensions: xmlwriter
       - name: Test code style
         run: phpcs
   test:
@@ -27,7 +28,7 @@ jobs:
           php-version: ${{ matrix.php }}
           tools: pecl
           coverage: pcov
-          extensions: xmlwriter
+          extensions: mbstring
       - name: Get composer cache directory
         id: composer-cache
         run: echo "::set-output name=dir::$(composer config cache-files-dir)"
