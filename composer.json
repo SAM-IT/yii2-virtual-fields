@@ -24,12 +24,35 @@
     },
     "require-dev": {
         "yiisoft/yii2": "^2.0",
-        "codeception/codeception": "^3.1"
+        "codeception/codeception": "> 4",
+        "squizlabs/php_codesniffer": "^3.5",
+        "brainmaestro/composer-git-hooks": "^2.8",
+        "codeception/module-yii2": "^1.1",
+        "codeception/module-asserts": "^1.2"
+
     },
     "repositories": [
         {
             "type": "composer",
             "url": "https://asset-packagist.org"
         }
-    ]
+    ],
+    "scripts": {
+        "post-install-cmd": "cghooks add --ignore-lock",
+        "test": "codecept run --coverage",
+        "lint": "vendor/bin/phpcs",
+        "lint-fix": "vendor/bin/phpcbf"
+    },
+    "extra": {
+        "hooks": {
+            "pre-commit": [
+                "echo committing as $(git config user.name)",
+                "composer lint-fix",
+                "composer test"
+            ],
+            "commit-msg": [
+                "npx commitlint -e"
+            ]
+        }
+    }
 }
