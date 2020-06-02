@@ -1,5 +1,7 @@
 <?php
 
+namespace SamIT\Yii2\VirtualFields\Tests;
+
 use SamIT\Yii2\VirtualFields\VirtualFieldBehavior;
 
 class VirtualFieldBehaviorCest
