@@ -9,6 +9,4 @@ class FieldNotLoadedException extends \Exception
     {
         parent::__construct("Attempted to access field $field, but it does not support lazy loading and was not loaded");
     }
-
-
 }

@@ -3,7 +3,6 @@ declare(strict_types=1);
 
 namespace SamIT\Yii2\VirtualFields;
 
-
 use SamIT\Yii2\VirtualFields\exceptions\FieldNotFoundException;
 use SamIT\Yii2\VirtualFields\exceptions\FieldNotLoadedException;
 use yii\base\Behavior;
@@ -80,13 +79,11 @@ class VirtualFieldBehavior extends Behavior
         } else {
             parent::__set($name, $value);
         }
-
-
     }
 
     private function setValue($name, $value)
     {
-        switch($this->virtualFields[$name][self::CAST] ?? null) {
+        switch ($this->virtualFields[$name][self::CAST] ?? null) {
             case self::CAST_INT:
                 $this->values[$name] = (int) $value;
                 break;
@@ -134,6 +131,4 @@ class VirtualFieldBehavior extends Behavior
         return (isset($this->virtualFields[$name]) && !array_key_exists($name, $this->values))
             || parent::canSetProperty($name, $checkVars);
     }
-
-
 }

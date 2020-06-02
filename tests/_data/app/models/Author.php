@@ -3,7 +3,6 @@ declare(strict_types=1);
 
 namespace tests;
 
-
 use SamIT\Yii2\VirtualFields\VirtualFieldBehavior;
 use yii\db\ActiveRecord;
 
@@ -24,7 +23,9 @@ class Author extends ActiveRecord
                 'class' => VirtualFieldBehavior::class,
                 'virtualFields' => [
                     'postCount' => [
-                        VirtualFieldBehavior::LAZY => function(Author $author) { return $author->getPosts()->count(); },
+                        VirtualFieldBehavior::LAZY => function (Author $author) {
+                            return $author->getPosts()->count();
+                        },
                         VirtualFieldBehavior::CAST => VirtualFieldBehavior::CAST_INT,
                         VirtualFieldBehavior::GREEDY => Post::find()
                             ->andWhere('[[author_id]] = [[author]].[[id]]')
@@ -32,7 +33,9 @@ class Author extends ActiveRecord
                             ->select('count(*)')
                     ],
                     'postCountWithoutCast' => [
-                        VirtualFieldBehavior::LAZY => function(Author $author) { return $author->getPosts()->count(); },
+                        VirtualFieldBehavior::LAZY => function (Author $author) {
+                            return $author->getPosts()->count();
+                        },
                         VirtualFieldBehavior::GREEDY => Post::find()
                             ->andWhere('[[author_id]] = [[author]].[[id]]')
                             ->limit(1)
@@ -58,8 +61,8 @@ class Author extends ActiveRecord
     }
 
 
-    public function getPosts() {
+    public function getPosts()
+    {
         return $this->hasMany(Post::class, ['author_id' => 'id']);
     }
-
 }

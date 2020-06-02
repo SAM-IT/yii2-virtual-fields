@@ -51,11 +51,10 @@ class VirtualFieldBehaviorCest
         $I->assertSame(1, $author->postCount);
         $behavior = $author->detachBehavior(VirtualFieldBehavior::class);
         $I->assertInstanceOf(VirtualFieldBehavior::class, $behavior);
-        $I->expectThrowable(\yii\base\UnknownPropertyException::class, function() use ($author) {
+        $I->expectThrowable(\yii\base\UnknownPropertyException::class, function () use ($author) {
             $author->postCount;
         });
         $I->assertTrue($behavior->canGetProperty('postCount'));
         $author->attachBehavior(VirtualFieldBehavior::class, $behavior);
-
     }
 }

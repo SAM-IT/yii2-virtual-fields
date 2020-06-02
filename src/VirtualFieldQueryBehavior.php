@@ -3,7 +3,6 @@ declare(strict_types=1);
 
 namespace SamIT\Yii2\VirtualFields;
 
-
 use yii\base\Behavior;
 use yii\base\InvalidConfigException;
 use yii\db\ActiveQuery;
@@ -31,5 +30,4 @@ class VirtualFieldQueryBehavior extends Behavior
     {
         return $this->addField($this->owner, $fields);
     }
-
 }

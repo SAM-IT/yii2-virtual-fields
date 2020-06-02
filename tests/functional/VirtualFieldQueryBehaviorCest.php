@@ -26,13 +26,13 @@ class VirtualFieldQueryBehaviorCest
 
         $query = \tests\Author::find();
         $behavior = new VirtualFieldQueryBehavior();
-        $I->expectThrowable(UnknownMethodException::class, function() use ($query) {
+        $I->expectThrowable(UnknownMethodException::class, function () use ($query) {
             $query->withFields('postCount');
         });
 
 
         $query->attachBehavior(VirtualFieldQueryBehavior::class, $behavior);
-        $I->expectThrowable(FieldNotFoundException::class, function() use ($query) {
+        $I->expectThrowable(FieldNotFoundException::class, function () use ($query) {
             $query->withFields('Invalid');
         });
         $query->withFields('postCount', 'postCountWithoutCast');
