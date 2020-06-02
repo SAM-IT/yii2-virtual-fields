@@ -20,7 +20,7 @@ trait VirtualFieldQueryTrait
         if (empty($query->select)) {
             $columns[] = '*';
         }
-        foreach($fields as $field) {
+        foreach ($fields as $field) {
             $columns[$field] = $model->getVirtualExpression($field);
         }
         $query->addSelect($columns);
@@ -29,7 +29,6 @@ trait VirtualFieldQueryTrait
 
     public function withFields(string ...$fields): ActiveQuery
     {
-        $this->addField($this, $fields);
+        return $this->addField($this, $fields);
     }
-
 }
