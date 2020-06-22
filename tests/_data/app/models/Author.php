@@ -32,6 +32,16 @@ class Author extends ActiveRecord
                             ->limit(1)
                             ->select('count(*)')
                     ],
+                    'postCountFloat' => [
+                        VirtualFieldBehavior::LAZY => function (Author $author) {
+                            return $author->getPosts()->count();
+                        },
+                        VirtualFieldBehavior::CAST => VirtualFieldBehavior::CAST_FLOAT,
+                        VirtualFieldBehavior::GREEDY => Post::find()
+                            ->andWhere('[[author_id]] = [[author]].[[id]]')
+                            ->limit(1)
+                            ->select('count(*) + 0.5')
+                    ],
                     'postCountWithoutCast' => [
                         VirtualFieldBehavior::LAZY => function (Author $author) {
                             return $author->getPosts()->count();

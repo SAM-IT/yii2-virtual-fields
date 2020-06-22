@@ -15,6 +15,7 @@ class VirtualFieldBehavior extends Behavior
     public const GREEDY = 'greedy';
     public const CAST = 'cast';
     public const CAST_INT = 'int';
+    public const CAST_FLOAT = 'float';
 
     /**
      * Example:
@@ -84,6 +85,9 @@ class VirtualFieldBehavior extends Behavior
     private function setValue($name, $value)
     {
         switch ($this->virtualFields[$name][self::CAST] ?? null) {
+            case self::CAST_FLOAT:
+                $this->values[$name] = (float) $value;
+                break;
             case self::CAST_INT:
                 $this->values[$name] = (int) $value;
                 break;

@@ -37,12 +37,13 @@ class VirtualFieldQueryBehaviorCest
         $I->expectThrowable(FieldNotFoundException::class, function () use ($query) {
             $query->withFields('Invalid');
         });
-        $query->withFields('postCount', 'postCountWithoutCast');
+        $query->withFields('postCount', 'postCountWithoutCast', 'postCountFloat');
         $I->assertSame([[
             'id' => '15',
             'name' => 'test',
             'postCount' => '1',
-            'postCountWithoutCast' => '1'
+            'postCountWithoutCast' => '1',
+            'postCountFloat' => '1.5'
         ]], $query->asArray()->all());
 
 
@@ -55,6 +56,8 @@ class VirtualFieldQueryBehaviorCest
         $I->assertTrue($post->save());
 
         $I->assertSame(1, $author->postCount);
+        $I->assertIsFloat($author->postCountFloat);
+        $I->assertEqualsWithDelta(1.5, $author->postCountFloat, 0.0001);
         $I->assertSame("1", $author->postCountWithoutCast);
     }
 }
