@@ -5,6 +5,12 @@ To work this library needs to change 2 parts of the Yii2 ORM.
 - The model definitions
 - The query implementation
 
+# Installation
+
+```
+$ composer require sam-it/yii2-virtual-fields
+```
+
 # Configuration
 The change to `ActiveQuery` are simple and can be applied using a trait or a behavior. In case you did not subclass
 `ActiveQuery` you can choose to attach the behavior dynamically.
@@ -71,3 +77,11 @@ We found these classes greatly helped us in reducing the number of queries (impl
 To maximize compatibility and minimize issues we chose not to use joins, since they can potentially affect the number of records. In a number of cases the resulting query plan could be less than optimal.
 
 We chose not to overload `ActiveQuery::select()` to support virtual fields. Reason for this is the fact that it changes the semantics of `*`; `*` would not by default include all virtual fields.
+
+# Test
+
+[Codeception](https://codeception.com/) is used for unit testing. To run tests:
+
+```
+$ ./vendor/bin/codecept run
+```
