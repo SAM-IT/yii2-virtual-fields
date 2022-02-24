@@ -12,6 +12,7 @@
         <ignoreFiles>
             <directory name="vendor" />
             <directory name="tests/_support/_generated" />
+            <file name="tests/_support/FunctionalTester.php" />
         </ignoreFiles>
     </projectFiles>
 </psalm>
