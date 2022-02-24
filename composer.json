@@ -29,7 +29,6 @@
         "brainmaestro/composer-git-hooks": "^2.8",
         "codeception/module-yii2": "^1.1",
         "codeception/module-asserts": "^1.2",
-        "phpstan/phpstan": "^1.4",
         "vimeo/psalm": "^4.21"
 
     },
