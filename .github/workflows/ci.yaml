@@ -26,7 +26,6 @@ jobs:
         uses: shivammathur/setup-php@v2
         with:
           php-version: ${{ matrix.php }}
-          tools: scrutinizer/ocular, psalm
           coverage: pcov
           extensions: mbstring, curl, json, pdo-sqlite
       - name: Get composer cache directory
@@ -43,11 +42,11 @@ jobs:
       - name: Run tests
         run: composer test -- --coverage-xml
       - name: Run psalm
-        run: psalm
-      - name: Get Ocular
-        run: wget https://scrutinizer-ci.com/ocular.phar
-      - name: Push code coverage
-        run: ocular code-coverage:upload --format=php-clover tests/_output/coverage.xml
+        run: vendor/bin/psalm
+      - name: Upload Scrutinizer coverage
+        uses: sudo-bot/action-scrutinizer@latest
+        with:
+          cli-args: "--format=php-clover tests/_output/coverage.xml"
   release:
     name: Automated release
     needs: [test, cs]
