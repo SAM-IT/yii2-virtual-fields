@@ -15,10 +15,8 @@ use yii\db\ActiveQuery;
 class VirtualFieldQueryBehavior extends Behavior
 {
     use VirtualFieldQueryTrait;
-    /**
-     * @param \yii\db\ActiveQuery $owner
-     */
-    public function attach($owner)
+
+    public function attach($owner): void
     {
         parent::attach($owner);
         if (!$owner instanceof \yii\db\ActiveQuery) {
@@ -28,6 +26,6 @@ class VirtualFieldQueryBehavior extends Behavior
 
     public function withFields(string ...$fields): ActiveQuery
     {
-        return $this->addField($this->owner, $fields);
+        return $this->addField($this->owner, array_values($fields));
     }
 }

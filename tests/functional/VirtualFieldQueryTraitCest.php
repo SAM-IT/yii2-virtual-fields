@@ -6,13 +6,10 @@ namespace SamIT\Yii2\VirtualFields\Tests;
 use SamIT\Yii2\VirtualFields\exceptions\FieldNotFoundException;
 use SamIT\Yii2\VirtualFields\VirtualFieldQueryBehavior;
 use tests\Author;
-use yii\base\InvalidConfigException;
+use tests\AuthorQuery;
 use yii\base\UnknownMethodException;
 
-/**
- * @covers \SamIT\Yii2\VirtualFields\VirtualFieldQueryBehavior
- */
-final class VirtualFieldQueryBehaviorCest
+class VirtualFieldQueryTraitCest
 {
     public function _before(FunctionalTester $I): void
     {
@@ -28,19 +25,12 @@ final class VirtualFieldQueryBehaviorCest
         $I->assertTrue($post->save());
     }
 
-    // tests
     public function testQuery(FunctionalTester $I): void
     {
 
-        $query = \tests\Author::find();
-        $behavior = new VirtualFieldQueryBehavior();
-        $I->expectThrowable(UnknownMethodException::class, fn(): mixed => $query->withFields('postCount'));
+        $query = new AuthorQuery(Author::class);
 
-
-
-        $query->attachBehavior(VirtualFieldQueryBehavior::class, $behavior);
-
-        $I->expectThrowable(FieldNotFoundException::class, fn(): mixed => $query->withFields('Invalid'));
+        $I->expectThrowable(FieldNotFoundException::class, fn() => $query->withFields('Invalid'));
         $query->withFields('postCount', 'postCountWithoutCast', 'postCountFloat');
         $I->assertSame([[
             'id' => '15',
@@ -65,15 +55,5 @@ final class VirtualFieldQueryBehaviorCest
         $I->assertIsFloat($author->postCountFloat);
         $I->assertEqualsWithDelta(1.5, $author->postCountFloat, 0.0001);
         $I->assertSame("1", $author->postCountWithoutCast);
-    }
-
-    public function testAttachingToWrongClass(FunctionalTester $I): void
-    {
-        $author = new Author();
-        $I->expectThrowable(InvalidConfigException::class, fn(): mixed => $author->attachBehaviors([
-            'test' => [
-                'class' => VirtualFieldQueryBehavior::class
-            ]
-        ]));
     }
 }

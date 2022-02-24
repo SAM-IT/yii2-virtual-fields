@@ -4,8 +4,10 @@ declare(strict_types=1);
 namespace SamIT\Yii2\VirtualFields;
 
 use SamIT\Yii2\VirtualFields\exceptions\FieldNotFoundException;
+use SamIT\Yii2\VirtualFields\exceptions\FieldNotGreedyException;
 use SamIT\Yii2\VirtualFields\exceptions\FieldNotLoadedException;
 use yii\base\Behavior;
+use yii\db\ActiveQuery;
 use yii\db\ActiveRecord;
 use yii\db\ExpressionInterface;
 
@@ -28,17 +30,17 @@ class VirtualFieldBehavior extends Behavior
      *     ]
      * ]
      *
-     * @var array Virtual field definitions.
+     * @psalm-var array<array{ lazy: callable, greedy: ActiveQuery}> Virtual field definitions.
      *
      */
-    public $virtualFields = [];
+    public array $virtualFields = [];
 
     /**
-     * @var array|mixed[string] The values of the virtual fields indexed by field name
+     * @var array<string, mixed> The values of the virtual fields indexed by field name
      */
-    private $values = [];
+    private array $values = [];
 
-    public function events()
+    public function events(): array
     {
         return [
             ActiveRecord::EVENT_AFTER_REFRESH => 'resetValues',
@@ -46,26 +48,31 @@ class VirtualFieldBehavior extends Behavior
         ];
     }
 
-    public function getVirtualExpression($name): ExpressionInterface
+    public function getVirtualExpression(string $name): ExpressionInterface
     {
         if (!isset($this->virtualFields[$name])) {
             throw new FieldNotFoundException($name);
+        } elseif (!isset($this->virtualFields[$name][self::GREEDY])) {
+            throw new FieldNotGreedyException($name);
         }
         return $this->virtualFields[$name][self::GREEDY];
     }
 
-    public function resetValues()
+    public function getVirtualField(string $name): mixed
+    {
+        return $this->resolveValue($name);
+    }
+
+    public function resetValues(): void
     {
         $this->values = [];
     }
 
     /**
-     * @param string $name
-     * @return mixed
      * @throws FieldNotLoadedException
      * @throws \yii\base\UnknownPropertyException
      */
-    public function __get($name)
+    public function __get($name): mixed
     {
         if (isset($this->virtualFields[$name])) {
             return $this->resolveValue($name);
@@ -73,7 +80,7 @@ class VirtualFieldBehavior extends Behavior
         return parent::__get($name);
     }
 
-    public function __set($name, $value)
+    public function __set($name, $value): void
     {
         if (isset($this->virtualFields[$name])) {
             $this->setValue($name, $value);
@@ -82,7 +89,7 @@ class VirtualFieldBehavior extends Behavior
         }
     }
 
-    private function setValue($name, $value)
+    private function setValue(string $name, mixed $value): void
     {
         switch ($this->virtualFields[$name][self::CAST] ?? null) {
             case self::CAST_FLOAT:
@@ -113,13 +120,13 @@ class VirtualFieldBehavior extends Behavior
         return $this->values[$name];
     }
 
-    public function detach()
+    public function detach(): void
     {
         $this->resetValues();
     }
 
 
-    public function canGetProperty($name, $checkVars = true)
+    public function canGetProperty($name, $checkVars = true): bool
     {
         return isset($this->virtualFields[$name]) || parent::canGetProperty($name, $checkVars);
     }
@@ -130,7 +137,7 @@ class VirtualFieldBehavior extends Behavior
      * @param bool $checkVars
      * @return bool
      */
-    public function canSetProperty($name, $checkVars = true)
+    public function canSetProperty($name, $checkVars = true): bool
     {
         return (isset($this->virtualFields[$name]) && !array_key_exists($name, $this->values))
             || parent::canSetProperty($name, $checkVars);

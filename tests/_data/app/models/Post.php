@@ -15,7 +15,7 @@ class Post extends ActiveRecord
 {
 
 
-    public static function createTable()
+    public static function createTable(): void
     {
         $schema = self::getDb()->schema;
         self::getDb()->createCommand()->createTable(self::tableName(), [
