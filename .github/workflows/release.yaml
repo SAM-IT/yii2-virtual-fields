@@ -15,16 +15,14 @@ jobs:
           php-version: '8.1'
       - name: Install dependencies
         run: composer install
+      - name: Run tests
+        run: vendor/bin/codecept run --coverage-xml
       - name: Test code style
         run: vendor/bin/ecs
       - name: Static analysis (Psalm)
         run: vendor/bin/psalm
       - name: Static analysis (PHPStan)
         run: vendor/bin/phpstan
-      - name: Prepare tests
-        run: vendor/bin/codecept build
-      - name: Run tests
-        run: vendor/bin/codecept run --coverage-xml
       - name: Upload Scrutinizer coverage
         uses: sudo-bot/action-scrutinizer@latest
         with:
