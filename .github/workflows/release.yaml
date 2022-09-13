@@ -17,6 +17,8 @@ jobs:
         run: composer install
       - name: Prepare tests
         run: vendor/bin/codecept build
+      - name: Regenerate autoloader
+        run: composer dumpautoload
       - name: Run tests
         run: vendor/bin/codecept run --coverage-xml
       - name: Test code style
