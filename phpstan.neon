@@ -1,0 +1,11 @@
+parameters:
+  level: 9
+  paths:
+    - src
+    - tests
+  excludePaths:
+    - tests/_support/_generated
+  treatPhpDocTypesAsCertain: false
+  ignoreErrors:
+    - '#Method .*::getModelInstance\(\) should return #'
+  reportUnmatchedIgnoredErrors: false

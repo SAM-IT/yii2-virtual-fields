@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 namespace tests;
 
@@ -8,7 +9,7 @@ use yii\db\ActiveQuery;
 /**
  * @psalm-suppress PropertyNotSetInConstructor
  */
-class AuthorQuery extends ActiveQuery
+final class AuthorQuery extends ActiveQuery
 {
     use VirtualFieldQueryTrait;
 }

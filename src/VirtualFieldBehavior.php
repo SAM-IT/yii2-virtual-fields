@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace SamIT\Yii2\VirtualFields;
@@ -7,17 +8,25 @@ use SamIT\Yii2\VirtualFields\exceptions\FieldNotFoundException;
 use SamIT\Yii2\VirtualFields\exceptions\FieldNotGreedyException;
 use SamIT\Yii2\VirtualFields\exceptions\FieldNotLoadedException;
 use yii\base\Behavior;
-use yii\db\ActiveQuery;
+use yii\base\InvalidConfigException;
+use yii\base\UnknownPropertyException;
 use yii\db\ActiveRecord;
 use yii\db\ExpressionInterface;
 
-class VirtualFieldBehavior extends Behavior
+/**
+ * @property ActiveRecord $owner
+ * @phpstan-type LazyResolver callable(mixed $model):(int|bool|string|null|float)
+ * @phpstan-type VirtualFieldConfig array{lazy?: callable, greedy?: ExpressionInterface, cast?: int|bool|string|null|float}
+ */
+final class VirtualFieldBehavior extends Behavior implements GetVirtualExpression
 {
     public const LAZY = 'lazy';
     public const GREEDY = 'greedy';
     public const CAST = 'cast';
     public const CAST_INT = 'int';
     public const CAST_FLOAT = 'float';
+    public const CAST_BOOL = 'float';
+    public const CAST_STRING = 'string';
 
     /**
      * Example:
@@ -29,9 +38,7 @@ class VirtualFieldBehavior extends Behavior
      *
      *     ]
      * ]
-     *
-     * @psalm-var array<array{ lazy: callable, greedy: ActiveQuery}> Virtual field definitions.
-     *
+     * @phpstan-var array<string, VirtualFieldConfig>
      */
     public array $virtualFields = [];
 
@@ -40,11 +47,14 @@ class VirtualFieldBehavior extends Behavior
      */
     private array $values = [];
 
+    /**
+     * @return array<string, callable>
+     */
     public function events(): array
     {
         return [
-            ActiveRecord::EVENT_AFTER_REFRESH => 'resetValues',
-            ActiveRecord::EVENT_AFTER_UPDATE => 'resetValues'
+            ActiveRecord::EVENT_AFTER_REFRESH => $this->resetValues(...),
+            ActiveRecord::EVENT_AFTER_UPDATE => $this->resetValues(...)
         ];
     }
 
@@ -77,30 +87,28 @@ class VirtualFieldBehavior extends Behavior
         if (isset($this->virtualFields[$name])) {
             return $this->resolveValue($name);
         }
-        return parent::__get($name);
+        throw new UnknownPropertyException('Getting unknown property: ' . get_class($this) . '::' . $name);
     }
 
+    /**
+     * This path is used during greedy loading
+     */
     public function __set($name, $value): void
     {
-        if (isset($this->virtualFields[$name])) {
+        if (isset($this->virtualFields[$name]) && (is_scalar($value) || is_null($value))) {
             $this->setValue($name, $value);
-        } else {
-            parent::__set($name, $value);
         }
     }
 
-    private function setValue(string $name, mixed $value): void
+    private function setValue(string $name, int|float|bool|string|null $value): void
     {
-        switch ($this->virtualFields[$name][self::CAST] ?? null) {
-            case self::CAST_FLOAT:
-                $this->values[$name] = (float) $value;
-                break;
-            case self::CAST_INT:
-                $this->values[$name] = (int) $value;
-                break;
-            default:
-                $this->values[$name] = $value;
-        }
+        $this->values[$name] = $value === null ? null : match ($this->virtualFields[$name][self::CAST] ?? null) {
+            self::CAST_FLOAT => (float) $value,
+            self::CAST_INT => (int) $value,
+            self::CAST_BOOL => (bool) $value,
+            self::CAST_STRING => (string) $value,
+            default => $value,
+        };
     }
 
     /**
@@ -114,7 +122,19 @@ class VirtualFieldBehavior extends Behavior
             if (!isset($this->virtualFields[$name][self::LAZY])) {
                 throw new FieldNotLoadedException($name);
             }
-            $this->setValue($name, $this->virtualFields[$name][self::LAZY]($this->owner));
+
+            $closure = $this->virtualFields[$name][self::LAZY];
+            if (!is_callable($closure)) {
+                throw new InvalidConfigException('Lazy loader must be a callable');
+            }
+
+            /** @var mixed $value */
+            $value = $closure($this->owner);
+            if (is_scalar($value) || $value === null) {
+                $this->setValue($name, $value);
+            } else {
+                throw new InvalidConfigException('Lazy loader must return a scalar or null');
+            }
         }
 
         return $this->values[$name];

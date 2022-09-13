@@ -1,15 +1,14 @@
 <?php
+
 declare(strict_types=1);
 
 namespace SamIT\Yii2\VirtualFields\Tests;
 
 use SamIT\Yii2\VirtualFields\exceptions\FieldNotFoundException;
-use SamIT\Yii2\VirtualFields\VirtualFieldQueryBehavior;
 use tests\Author;
 use tests\AuthorQuery;
-use yii\base\UnknownMethodException;
 
-class VirtualFieldQueryTraitCest
+final class VirtualFieldQueryTraitCest
 {
     public function _before(FunctionalTester $I): void
     {
@@ -27,10 +26,9 @@ class VirtualFieldQueryTraitCest
 
     public function testQuery(FunctionalTester $I): void
     {
-
         $query = new AuthorQuery(Author::class);
 
-        $I->expectThrowable(FieldNotFoundException::class, fn() => $query->withFields('Invalid'));
+        $I->expectThrowable(FieldNotFoundException::class, fn () => $query->withFields('Invalid'));
         $query->withFields('postCount', 'postCountWithoutCast', 'postCountFloat');
         $I->assertSame([[
             'id' => '15',

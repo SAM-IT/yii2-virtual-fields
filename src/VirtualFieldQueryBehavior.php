@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace SamIT\Yii2\VirtualFields;
@@ -12,7 +13,7 @@ use yii\db\ActiveQuery;
  * Attach this to ActiveQuery.
  * @property \yii\db\ActiveQuery $owner
  */
-class VirtualFieldQueryBehavior extends Behavior
+final class VirtualFieldQueryBehavior extends Behavior
 {
     use VirtualFieldQueryTrait;
 
@@ -24,6 +25,9 @@ class VirtualFieldQueryBehavior extends Behavior
         }
     }
 
+    /**
+     * @throws exceptions\FieldNotFoundException
+     */
     public function withFields(string ...$fields): ActiveQuery
     {
         return $this->addField($this->owner, array_values($fields));

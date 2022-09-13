@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace SamIT\Yii2\VirtualFields;
@@ -14,11 +15,11 @@ use yii\db\ActiveRecord;
 trait VirtualFieldQueryTrait
 {
     /**
-     * @return ActiveRecord&VirtualFieldBehavior
-     * @psalm-suppress InvalidReturnType
      * @param class-string<ActiveRecord> $class
+     * @psalm-suppress InvalidReturnType
+     * @phpstan-return ActiveRecord&GetVirtualExpression
      */
-    private function getModelInstance($class): ActiveRecord
+    private function getModelInstance(string $class): ActiveRecord
     {
         return ($class)::instance();
     }
@@ -31,8 +32,10 @@ trait VirtualFieldQueryTrait
      */
     private function addField(ActiveQuery $query, array $fields): ActiveQuery
     {
-        /** @var class-string<ActiveRecord> $query->modelClass */
-        $model = $this->getModelInstance($query->modelClass);
+        /** @var class-string<ActiveRecord> $modelClass */
+        $modelClass = $query->modelClass;
+        $model = $this->getModelInstance($modelClass);
+
         $columns = [];
         if (empty($query->select)) {
             $columns[] = '*';

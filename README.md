@@ -8,6 +8,7 @@ To work this library needs to change 2 parts of the Yii2 ORM.
 # Configuration
 The change to `ActiveQuery` are simple and can be applied using a trait or a behavior. In case you did not subclass
 `ActiveQuery` you can choose to attach the behavior dynamically.
+
 ```php
 use SamIT\Yii2\VirtualFields\VirtualFieldQueryBehavior;
 use SamIT\Yii2\VirtualFields\VirtualFieldBehavior;

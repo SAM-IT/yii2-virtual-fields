@@ -1,5 +1,8 @@
 name: Continous integration
-on: [push, pull_request]
+on:
+  push:
+    branches:
+      - master
 jobs:
   code_checks:
     name: Check code style
@@ -24,27 +27,26 @@ jobs:
         uses: sudo-bot/action-scrutinizer@latest
         with:
           cli-args: "--format=php-clover tests/_output/coverage.xml"
-  commitlint:
-    name: commit-lint
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-        with:
-          fetch-depth: 0
-      - uses: wagoid/commitlint-github-action@v5
-        with:
-          configFile: ../../commitlint.config.js
   release:
     name: Automated release
-    needs: [test, cs]
+    needs: [ code_checks ]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
       - uses: actions/setup-node@v1
         with:
-          node-version: '14.x'
-      - name: install dependencies for semantic-release
-        run: npm ci
-      - run: $(npm bin)/semantic-release
+          node-version: '16.x'
+      - run: >
+          npx
+          -p "@semantic-release/commit-analyzer"
+          -p "@semantic-release/release-notes-generator"
+          -p conventional-changelog-conventionalcommits
+          -p semantic-release
+          -- semantic-release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Set up PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.1'
+          tools: phpDocumentor

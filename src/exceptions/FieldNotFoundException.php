@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace SamIT\Yii2\VirtualFields\exceptions;
@@ -6,7 +7,7 @@ namespace SamIT\Yii2\VirtualFields\exceptions;
 /**
  * @codeCoverageIgnore
  */
-class FieldNotFoundException extends \Exception
+final class FieldNotFoundException extends \Exception
 {
     public function __construct(string $field)
     {

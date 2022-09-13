@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace tests;
@@ -11,10 +12,8 @@ use yii\db\ActiveRecord;
  * @property ?string $name
  * @property int $author_id
  */
-class Post extends ActiveRecord
+final class Post extends ActiveRecord
 {
-
-
     public static function createTable(): void
     {
         $schema = self::getDb()->schema;

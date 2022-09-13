@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace SamIT\Yii2\VirtualFields\Tests;
@@ -31,16 +32,15 @@ final class VirtualFieldQueryBehaviorCest
     // tests
     public function testQuery(FunctionalTester $I): void
     {
-
         $query = \tests\Author::find();
         $behavior = new VirtualFieldQueryBehavior();
-        $I->expectThrowable(UnknownMethodException::class, fn(): mixed => $query->withFields('postCount'));
+        $I->expectThrowable(UnknownMethodException::class, fn (): mixed => $query->withFields('postCount'));
 
 
 
         $query->attachBehavior(VirtualFieldQueryBehavior::class, $behavior);
 
-        $I->expectThrowable(FieldNotFoundException::class, fn(): mixed => $query->withFields('Invalid'));
+        $I->expectThrowable(FieldNotFoundException::class, fn (): mixed => $query->withFields('Invalid'));
         $query->withFields('postCount', 'postCountWithoutCast', 'postCountFloat');
         $I->assertSame([[
             'id' => '15',
@@ -70,7 +70,7 @@ final class VirtualFieldQueryBehaviorCest
     public function testAttachingToWrongClass(FunctionalTester $I): void
     {
         $author = new Author();
-        $I->expectThrowable(InvalidConfigException::class, fn(): mixed => $author->attachBehaviors([
+        $I->expectThrowable(InvalidConfigException::class, fn (): mixed => $author->attachBehaviors([
             'test' => [
                 'class' => VirtualFieldQueryBehavior::class
             ]
