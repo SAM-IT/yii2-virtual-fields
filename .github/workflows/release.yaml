@@ -1,4 +1,4 @@
-name: Continous integration
+name: Automated Release
 on:
   push:
     branches:

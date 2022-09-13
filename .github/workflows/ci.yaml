@@ -1,5 +1,10 @@
 name: Continous integration
-on: [push, pull_request]
+on:
+  pull_request:
+  push:
+    branches:
+      - '**'
+      - '!master'
 jobs:
   code_checks:
     name: Check code style
@@ -34,17 +39,3 @@ jobs:
       - uses: wagoid/commitlint-github-action@v5
         with:
           configFile: ../../commitlint.config.js
-  release:
-    name: Automated release
-    needs: [test, cs]
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-      - uses: actions/setup-node@v1
-        with:
-          node-version: '14.x'
-      - name: install dependencies for semantic-release
-        run: npm ci
-      - run: $(npm bin)/semantic-release
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
