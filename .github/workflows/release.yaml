@@ -21,6 +21,8 @@ jobs:
         run: vendor/bin/psalm
       - name: Static analysis (PHPStan)
         run: vendor/bin/phpstan
+      - name: Prepare tests
+        run: vendor/bin/codecept build
       - name: Run tests
         run: vendor/bin/codecept run --coverage-xml
       - name: Upload Scrutinizer coverage
