@@ -25,7 +25,7 @@ final class VirtualFieldBehavior extends Behavior implements GetVirtualExpressio
     public const CAST = 'cast';
     public const CAST_INT = 'int';
     public const CAST_FLOAT = 'float';
-    public const CAST_BOOL = 'float';
+    public const CAST_BOOL = 'bool';
     public const CAST_STRING = 'string';
 
     /**
