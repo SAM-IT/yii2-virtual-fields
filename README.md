@@ -45,7 +45,17 @@ class Author extends ActiveRecord
                             ->andWhere('[[author_id]] = [[author]].[[id]]')
                             ->limit(1)
                             ->select('count(*)')
-                    ]
+                    ],
+                    'postCount2' => [
+                        VirtualFieldBehavior::LAZY => function(Author $author) { return $author->getPosts()->count(); },
+                        VirtualFieldBehavior::CAST => VirtualFieldBehavior::CAST_INT,
+                        // Sometimes you might want to defer loading of your greedy definition in such cases you may supply a closure.
+                        // This closure will be called only once
+                        VirtualFieldBehavior::GREEDY => static fn() => Post::find()
+                            ->andWhere('[[author_id]] = [[author]].[[id]]')
+                            ->limit(1)
+                            ->select('count(*)')
+                    ]       
                 ]
             ]
         ];

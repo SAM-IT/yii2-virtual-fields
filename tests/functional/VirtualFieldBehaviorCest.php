@@ -13,6 +13,7 @@ use tests\Post;
 use yii\base\InvalidConfigException;
 use yii\base\UnknownPropertyException;
 use yii\db\Expression;
+use yii\db\ExpressionInterface;
 
 final class VirtualFieldBehaviorCest
 {
@@ -93,6 +94,8 @@ final class VirtualFieldBehaviorCest
 
         $I->assertIsFloat($author->postCountFloat);
     }
+
+
     public function testStringCast(FunctionalTester $I): void
     {
         $author = new Author();
@@ -206,14 +209,15 @@ final class VirtualFieldBehaviorCest
             'lazyPostCount' => [
                 VirtualFieldBehavior::LAZY => fn (Author $author): int|null|string => $author->getPosts()->count(),
                 VirtualFieldBehavior::CAST => VirtualFieldBehavior::CAST_INT,
-            ]
+            ],
+            'greedyPostClosureCount' => [
+                VirtualFieldBehavior::GREEDY => static fn (): ExpressionInterface => $expression
+            ],
         ];
 
-
-
-
-
         $I->assertSame($expression, $subject->getVirtualExpression('postCountFloat'));
+
+        $I->assertSame($expression, $subject->getVirtualExpression('greedyPostClosureCount'));
 
         $I->expectThrowable(FieldNotFoundException::class, fn () => $subject->getVirtualExpression('someOtherCount'));
 

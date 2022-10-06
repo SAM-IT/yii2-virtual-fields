@@ -16,7 +16,8 @@ use yii\db\ExpressionInterface;
 /**
  * @property ActiveRecord $owner
  * @phpstan-type LazyResolver callable(mixed $model):(int|bool|string|null|float)
- * @phpstan-type VirtualFieldConfig array{lazy?: callable, greedy?: ExpressionInterface, cast?: int|bool|string|null|float}
+ * @phpstan-type GreedyResolver callable():ExpressionInterface
+ * @phpstan-type VirtualFieldConfig array{lazy?: callable, greedy?: GreedyResolver|ExpressionInterface, cast?: int|bool|string|null|float}
  */
 final class VirtualFieldBehavior extends Behavior implements GetVirtualExpression
 {
@@ -65,6 +66,10 @@ final class VirtualFieldBehavior extends Behavior implements GetVirtualExpressio
         } elseif (!isset($this->virtualFields[$name][self::GREEDY])) {
             throw new FieldNotGreedyException($name);
         }
+
+        if (is_callable($this->virtualFields[$name][self::GREEDY])) {
+            return $this->virtualFields[$name][self::GREEDY]();
+        }
         return $this->virtualFields[$name][self::GREEDY];
     }
 
@@ -92,6 +97,7 @@ final class VirtualFieldBehavior extends Behavior implements GetVirtualExpressio
 
     /**
      * This path is used during greedy loading
+     * @internal
      */
     public function __set($name, $value): void
     {

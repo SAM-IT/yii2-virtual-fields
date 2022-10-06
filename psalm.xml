@@ -13,6 +13,7 @@
             <directory name="vendor" />
             <directory name="tests/_support/_generated" />
             <file name="tests/_support/FunctionalTester.php" />
+            <file name="tests/_support/UnitTester.php" />
         </ignoreFiles>
     </projectFiles>
 </psalm>
