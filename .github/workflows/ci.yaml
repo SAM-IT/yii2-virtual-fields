@@ -25,10 +25,6 @@ jobs:
         run: vendor/bin/phpstan
       - name: Run tests
         run: vendor/bin/codecept run --coverage-xml
-      - name: Upload Scrutinizer coverage
-        uses: sudo-bot/action-scrutinizer@latest
-        with:
-          cli-args: "--format=php-clover tests/_output/coverage.xml"
   commitlint:
     name: commit-lint
     runs-on: ubuntu-latest
