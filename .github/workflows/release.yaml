@@ -29,10 +29,6 @@ jobs:
         run: vendor/bin/psalm
       - name: Static analysis (PHPStan)
         run: vendor/bin/phpstan
-      - name: Upload Scrutinizer coverage
-        uses: sudo-bot/action-scrutinizer@latest
-        with:
-          cli-args: "--format=php-clover tests/_output/coverage.xml"
   release:
     name: Automated release
     needs: [ code_checks ]
