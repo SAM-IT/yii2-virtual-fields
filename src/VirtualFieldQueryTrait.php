@@ -25,30 +25,30 @@ trait VirtualFieldQueryTrait
     }
 
     /**
-     * @param ActiveQuery $query
      * @param list<string> $fields
-     * @return ActiveQuery
-     * @throws exceptions\FieldNotFoundException
      */
-    private function addField(ActiveQuery $query, array $fields): ActiveQuery
+    private function addField(ActiveQuery $query, array $fields): void
     {
         /** @var class-string<ActiveRecord> $modelClass */
         $modelClass = $query->modelClass;
         $model = $this->getModelInstance($modelClass);
 
         $columns = [];
-        if (empty($query->select)) {
+        if ($query->select === null || $query->select === []) {
             $columns[] = '*';
         }
         foreach ($fields as $field) {
             $columns[$field] = $model->getVirtualExpression($field);
         }
         $query->addSelect($columns);
-        return $query;
     }
 
+    /**
+     * @return $this
+     */
     public function withFields(string ...$fields): ActiveQuery
     {
-        return $this->addField($this, array_values($fields));
+        $this->addField($this, array_values($fields));
+        return $this;
     }
 }
