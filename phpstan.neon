@@ -3,9 +3,10 @@ parameters:
   paths:
     - src
     - tests
-  excludePaths:
-    - tests/_support/_generated
   treatPhpDocTypesAsCertain: false
   ignoreErrors:
     - '#Method .*::getModelInstance\(\) should return #'
+    - message: "#.*#"
+      paths:
+        - tests/_support/_generated
   reportUnmatchedIgnoredErrors: false
