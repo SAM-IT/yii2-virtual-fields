@@ -8,7 +8,7 @@ jobs:
     name: Check code style
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
         with:
           fetch-depth: 10
       - name: Set up PHP
@@ -34,10 +34,10 @@ jobs:
     needs: [ code_checks ]
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
-      - uses: actions/setup-node@v3
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
         with:
-          node-version: 18
+          node-version: 21
       - run: >
           npx
           -p "@semantic-release/commit-analyzer"
