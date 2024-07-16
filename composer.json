@@ -24,12 +24,12 @@
     },
     "require-dev": {
         "yiisoft/yii2": "^2.0",
-        "codeception/codeception": "> 4",
+        "codeception/codeception": "> 5",
         "codeception/module-yii2": "^1.1",
-        "codeception/module-asserts": "^1.2",
-        "vimeo/psalm": "^4.21",
-        "symplify/easy-coding-standard": "^11.1",
-        "phpstan/phpstan": "^1.8",
+        "codeception/module-asserts": "^3",
+        "vimeo/psalm": "^5",
+        "symplify/easy-coding-standard": "^12",
+        "phpstan/phpstan": "^1",
         "captainhook/plugin-composer": "^5.3",
         "ramsey/conventional-commits": "^1.3"
 

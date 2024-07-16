@@ -30,6 +30,7 @@ final class VirtualFieldQueryBehavior extends Behavior
      */
     public function withFields(string ...$fields): ActiveQuery
     {
-        return $this->addField($this->owner, array_values($fields));
+        $this->addField($this->owner, array_values($fields));
+        return $this->owner;
     }
 }
