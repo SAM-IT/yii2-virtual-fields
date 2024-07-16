@@ -1,6 +1,7 @@
 name: Continous integration
 on:
   pull_request:
+    types: [opened, reopened]
   push:
     branches:
       - '**'
@@ -21,6 +22,8 @@ jobs:
         run: vendor/bin/ecs
       - name: Static analysis (Psalm)
         run: vendor/bin/psalm
+      - name: Build test help files
+        run: vendor/bin/codecept build
       - name: Static analysis (PHPStan)
         run: vendor/bin/phpstan
       - name: Run tests
